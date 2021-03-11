@@ -74,9 +74,6 @@ class Main_UI(QMainWindow):
             #Making time display color red when under 15 mins
             if data[item]["time"] < 900 and not data[item]["disabled"]:
                 self.list_apps.item(row_count, 1).setForeground(QColor(255, 0, 0))
-            
-            #processes = list(set(map(lambda x: x.name(), psutil.process_iter())))
-            #status = "Running..." if item in processes else "Closed"
 
             self.list_apps.setItem(row_count, 2, QTableWidgetItem("---"))
             #Save row location of item
@@ -93,50 +90,56 @@ class Main_UI(QMainWindow):
     
     def deletebtn_clicked(self):
         try:
-            if self.list_apps.currentRow() < 0: return
+            row = self.list_apps.currentRow()
+            if row < 0: return
 
-            item_name = self.list_apps.item(self.list_apps.currentRow(), 0).text()
+            item_name = self.list_apps.item(row, 0).text()
             self.data.pop(item_name)
 
             with open("app_saves.json", "w") as file:
                 file.write(json.dumps(self.data))
 
             self.list_apps.removeRow(self.item_locations[item_name])
+            #Updating item_locations 
+            self.item_locations = dict(zip(self.data, list(range(0,self.list_apps.rowCount()))))
+
+        except Exception as e:
+            print(e)
+    
+    def handle_progress(self):
+        try:
+            processes = list(set(map(lambda x: x.name(), psutil.process_iter())))
+            for item in self.data:
+                row = self.item_locations[item]
+                status = "Running..." if item in processes else "closed"
+
+                if not self.data[item]["disabled"] and self.data[item]["time"] != 0:
+                    self.data[item]["time"] -= 1
+                    time = self.Tools.convert_time(self.data[item]["time"])
+                    self.list_apps.setItem(row, 0, QTableWidgetItem(item))
+                    self.list_apps.setItem(row, 1, QTableWidgetItem(time))
+                    self.list_apps.setItem(row, 2, QTableWidgetItem(status))
+
+                    #Setting colors
+                    if self.data[item]["time"] < 900:
+                        print(row)
+                        self.list_apps.item(row, 1).setForeground(QColor(255, 0, 0))
+                    if status == "Running...":
+                        self.list_apps.item(row, 2).setForeground(QColor(0, 200, 0))
+
+                self.update()
         except Exception as e:
             print(e)
 
-    
-    def handle_progress(self):
-        processes = list(set(map(lambda x: x.name(), psutil.process_iter())))
-        for item in self.data:
-            row = self.item_locations[item]
-            status = "Running..." if item in processes else "closed"
-
-            if not self.data[item]["disabled"]:
-                self.data[item]["time"] -= 1
-                time = self.Tools.convert_time(self.data[item]["time"])
-                self.list_apps.setItem(row, 0, QTableWidgetItem(item))
-                self.list_apps.setItem(row, 1, QTableWidgetItem(time))
-                self.list_apps.setItem(row, 2, QTableWidgetItem(status))
-
-                #Setting colors
-                if self.data[item]["time"] < 900:
-                    self.list_apps.item(row, 1).setForeground(QColor(255, 0, 0))
-                if status == "Running...":
-                    self.list_apps.item(row, 2).setForeground(QColor(0, 200, 0))
-
-            self.update()
-
     def startbtn_clicked(self):
-        self.stopbtn.setEnabled(True)
-        self.startbtn.setDisabled(True)
-        self.running = True
-        self.worker = Worker(self.Tools.start_refresh)
-
-        self.worker.signals.progress.connect(self.handle_progress)
-        
-     #  worker.signals.result.connect(lambda: print())
         try:
+            self.stopbtn.setEnabled(True)
+            self.startbtn.setDisabled(True)
+            self.running = True
+            self.worker = Worker(self.Tools.start_refresh)
+
+            self.worker.signals.progress.connect(self.handle_progress)
+
             self.threadpool.start(self.worker)
             self.deletebtn.setDisabled(True)
             self.log_status.setText("ON")
@@ -154,7 +157,6 @@ class Main_UI(QMainWindow):
         #Enabling edit and delete buttons if an item is selected
         if self.list_apps.currentRow():
             self.deletebtn.setEnabled(True)
-
 
 class AddWindow(QMainWindow):
     def __init__(self, main_window):

@@ -44,7 +44,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>120</x>
       <y>270</y>
       <width>91</width>
       <height>31</height>
@@ -81,6 +81,9 @@
       <bold>false</bold>
      </font>
     </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::CustomContextMenu</enum>
+    </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
@@ -91,7 +94,7 @@
      <bool>false</bool>
     </property>
     <property name="selectionMode">
-     <enum>QAbstractItemView::SingleSelection</enum>
+     <enum>QAbstractItemView::ContiguousSelection</enum>
     </property>
     <property name="selectionBehavior">
      <enum>QAbstractItemView::SelectRows</enum>
@@ -126,9 +129,6 @@
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>167</number>
     </attribute>
-    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-     <bool>false</bool>
-    </attribute>
     <attribute name="horizontalHeaderStretchLastSection">
      <bool>false</bool>
     </attribute>
@@ -137,6 +137,9 @@
     </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
      <number>45</number>
+    </attribute>
+    <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+     <bool>false</bool>
     </attribute>
     <column>
      <property name="text">
@@ -298,6 +301,22 @@
     </property>
     <property name="text">
      <string>OFF</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="close_appbtn">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>270</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Close app</string>
     </property>
    </widget>
   </widget>
