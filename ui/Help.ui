@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>403</width>
-    <height>201</height>
+    <width>390</width>
+    <height>160</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>390</width>
+    <height>160</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Help</string>
@@ -16,10 +22,10 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>70</x>
      <y>10</y>
-     <width>231</width>
-     <height>71</height>
+     <width>301</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="font">
@@ -40,7 +46,7 @@
     <rect>
      <x>120</x>
      <y>80</y>
-     <width>121</width>
+     <width>151</width>
      <height>51</height>
     </rect>
    </property>
@@ -53,9 +59,15 @@
     </font>
    </property>
    <property name="text">
-    <string>Hexsae#3600</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;discordapp.com/users/242346349859700736&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Hexsae#3600&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::RichText</enum>
    </property>
    <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+   <property name="openExternalLinks">
     <bool>true</bool>
    </property>
   </widget>
