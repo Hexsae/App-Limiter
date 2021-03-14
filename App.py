@@ -103,6 +103,8 @@ class Main_UI(QMainWindow):
 
             item_name = self.list_apps.item(row, 0).text()
             self.data.pop(item_name)
+            f_index = self.finished.index(item_name)
+            self.finished.pop(f_index)
 
             with open("app_saves.json", "w") as file:
                 file.write(json.dumps(self.data))
@@ -151,9 +153,7 @@ class Main_UI(QMainWindow):
             self.startbtn.setDisabled(True)
             self.running = True
             self.worker = Worker(self.Tools.start_refresh)
-            #reset sefl.finished
-            self.finished = []
-
+            
             self.worker.signals.progress.connect(self.handle_progress)
 
             self.threadpool.start(self.worker)
@@ -169,6 +169,9 @@ class Main_UI(QMainWindow):
         self.running = False
         self.log_status.setText("OFF")
         self.log_status.setStyleSheet("color: red")
+
+        for row in range(self.list_apps.rowCount()):
+            self.list_apps.setItem(row, 2, QTableWidgetItem("---"))
 
         #Enabling edit and delete buttons if an item is selected
         if self.list_apps.currentRow():
